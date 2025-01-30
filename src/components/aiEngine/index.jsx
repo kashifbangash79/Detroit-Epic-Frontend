@@ -196,6 +196,7 @@ function AiEngine() {
             <h3 className="text-[#1f2937] text-xl font-extrabold leading-tight tracking-tight px-4 pb-3 pt-4 border-b-2 border-[#e0f2fe]">
               📅 Your Itinerary
             </h3>
+            {/* jj */}
             {suggestions && Array.isArray(suggestions) ? (
               suggestions.map((item, index) => {
                 const dayTitle = item.dayTitle;
