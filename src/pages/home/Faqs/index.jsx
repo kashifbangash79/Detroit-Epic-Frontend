@@ -2,9 +2,14 @@ import { useState } from "react";
 
 const FAQs = () => {
   const [activeIndex, setActiveIndex] = useState(null);
+  const [showAll, setShowAll] = useState(false);
 
   const toggleAccordion = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
+  };
+
+  const toggleShowAll = () => {
+    setShowAll(!showAll);
   };
 
   const faqs = [
@@ -98,40 +103,44 @@ const FAQs = () => {
     },
   ];
 
+  const displayedFaqs = showAll ? faqs : faqs.slice(0, 4);
+
   return (
     <div className="container mx-auto p-5">
-      {/* Breadcrumbs */}
-      <nav className="text-lg text-black-800 mb-7 mt-4 text-lg">
-        <a href="/" className="hover:text-blue-500">
-          Home
-        </a>{" "}
-        &gt; <span>FAQs</span>
-      </nav>
-      <h1 className="text-3xl font-bold mb-6">Customer Support</h1>
-      <h2 className="text-4xl font-semibold mb-4">
+      <h2 className="text-4xl font-extrabold m-10 text-dark text-center md:text-3xl">
         Frequently Asked Questions
       </h2>
 
-      <div className="space-y-4 ">
-        {faqs.map((faq, index) => (
+      <div className="space-y-4">
+        {displayedFaqs.map((faq, index) => (
           <div
             key={index}
             className="bg-[#f4f4f4] border border-gray-200 shadow-md rounded-lg overflow-hidden"
           >
             <button
-              className="w-full text-left py-3 px-4 flex justify-between items-center text-lg font-medium hover:bg-[#f4f4f4] transition-colors"
+              className="w-full text-left py-3 px-4 flex justify-between items-center text-lg font-medium hover:bg-[#eaeaea] transition-colors"
               onClick={() => toggleAccordion(index)}
             >
               {faq.question}
               <span>{activeIndex === index ? "-" : "+"}</span>
             </button>
             {activeIndex === index && (
-              <div className="px-4 py-2 bg-[#f4f4f4] text-black-800 bg-gray-50">
+              <div className="px-4 py-2 bg-gray-50 text-black-800">
                 {faq.answer}
               </div>
             )}
           </div>
         ))}
+
+        {/* Toggle Button */}
+        <div className="bg-[#f4f4f4] border border-gray-200 shadow-md rounded-lg overflow-hidden">
+          <button
+            className="w-full text-center py-3 px-4 text-lg font-medium hover:bg-[#eaeaea] transition-colors"
+            onClick={toggleShowAll}
+          >
+            {showAll ? "Collapse FAQs" : "Show All FAQs"}
+          </button>
+        </div>
       </div>
     </div>
   );

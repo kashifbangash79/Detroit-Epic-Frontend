@@ -1,21 +1,21 @@
-import BlogPostCard from '@/components/blogPoastCard';
-import SearchBar from '@/components/searchbar/SearchBard';
-import ShareExperienceModal from '@/components/shareExperinceModal';
-import { useEffect, useState } from 'react';
-import { userApi } from '../../Apis/index.jsx';
-import Loader from '../../components/loader.jsx';
+import BlogPostCard from "@/components/blogPoastCard";
+import SearchBar from "@/components/searchbar/SearchBard";
+import ShareExperienceModal from "@/components/shareExperinceModal";
+import { useEffect, useState } from "react";
+import { userApi } from "../../Apis/index.jsx";
+import Loader from "../../components/loader.jsx";
 
 export default function BlogPage() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [newPost, setNewPost] = useState({
-    title: '',
-    category: '',
-    description: '',
-    image: '',
-    date: '',
+    title: "",
+    category: "",
+    description: "",
+    image: "",
+    date: "",
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -26,7 +26,7 @@ export default function BlogPage() {
       const response = await userApi.GetBlogs();
       setPosts(response);
     } catch (error) {
-      console.error('Failed to fetch blogs:', error);
+      console.error("Failed to fetch blogs:", error);
     } finally {
       setIsLoading(false);
     }
@@ -38,50 +38,56 @@ export default function BlogPage() {
   }, []);
 
   // Extract unique categories from the posts
-  const categories = Array.from(new Set(posts.map(post => post.category)));
+  const categories = Array.from(new Set(posts.map((post) => post.category)));
 
   // Filtered posts based on search and category
-  const filteredPosts = posts.filter(post => {
+  const filteredPosts = posts.filter((post) => {
     const matchesSearch =
-      searchQuery === '' ||
+      searchQuery === "" ||
       post.title.toLowerCase().startsWith(searchQuery.toLowerCase());
     const matchesCategory =
-      selectedCategory === 'all' ||
+      selectedCategory === "all" ||
       post.category.toLowerCase() === selectedCategory.toLowerCase();
     return matchesSearch && matchesCategory;
   });
 
   // Handle new post submission
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await userApi.CreateBlog(newPost);
-      alert('Blog created successfully!');
+      alert("Blog created successfully!");
       setNewPost({
-        title: '',
-        category: '',
-        description: '',
-        image: '',
-        date: '',
+        title: "",
+        category: "",
+        description: "",
+        image: "",
+        date: "",
       });
       setIsModalOpen(false);
       await fetchBlogs(); // Refresh blogs after submission
     } catch (error) {
-      console.error('Failed to create blog:', error);
-      alert('An error occurred while creating the blog. Please try again.');
+      console.error("Failed to create blog:", error);
+      alert("An error occurred while creating the blog. Please try again.");
     }
   };
 
   return (
-    <div className='container mx-auto px-4 py-8'>
-      <h1 className='text-3xl font-bold mb-6'>DEW Blog</h1>
+    <div className="container mx-auto px-4 py-8">
+      <nav className="text-lg text-black-800 mb-7 mt-6 text-2">
+        <a href="/" className="hover:text-blue-500">
+          Blog
+        </a>{" "}
+        &gt; <span>Partner</span>
+      </nav>
+      <h1 className="text-3xl font-bold mb-6">DEW Blog</h1>
 
       {/* Create blog Button */}
       <button
         onClick={() => setIsModalOpen(true)}
-        className='bg-blue-500 text-black border p-2 rounded mb-6'
+        className="bg-gray-700 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-gray-600 mb-10"
       >
-        Create Blog{' '}
+        Create Blog{" "}
       </button>
 
       {/* Modal for Submission Form */}
@@ -91,7 +97,7 @@ export default function BlogPage() {
           setIsModalOpen(false);
           fetchBlogs(); // Refresh blogs when modal closes
         }}
-        mode='blog'
+        mode="blog"
         newPost={newPost}
         setNewPost={setNewPost}
         handleSubmit={handleSubmit}
@@ -110,8 +116,8 @@ export default function BlogPage() {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-          {filteredPosts.map(post => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredPosts.map((post) => (
             <BlogPostCard key={post._id} post={post} />
           ))}
         </div>

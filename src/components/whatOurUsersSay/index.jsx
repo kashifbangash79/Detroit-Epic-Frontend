@@ -1,7 +1,7 @@
-import Loader from '@/components/loader';
-import { useEffect, useState } from 'react';
-import { userApi } from '../../Apis/index.jsx';
-import ShareReviewModal from '../../components/ShareReviewModal/index.jsx';
+import Loader from "@/components/loader";
+import { useEffect, useState } from "react";
+import { userApi } from "../../Apis/index.jsx";
+import ShareReviewModal from "../../components/ShareReviewModal/index.jsx";
 
 const WhatOurUsersSay = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -12,13 +12,13 @@ const WhatOurUsersSay = () => {
     setLoading(true);
     try {
       const response = await userApi.Getreviews();
-      const apiTestimonials = response.map(review => ({
-        name: review.createdBy?.fullName || 'Anonymous',
+      const apiTestimonials = response.map((review) => ({
+        name: review.createdBy?.fullName || "Anonymous",
         quote: review.description,
       }));
       setTestimonials(apiTestimonials);
     } catch (error) {
-      console.error('Failed to fetch reviews:', error);
+      console.error("Failed to fetch reviews:", error);
     } finally {
       setLoading(false);
     }
@@ -29,13 +29,13 @@ const WhatOurUsersSay = () => {
   }, []);
 
   return (
-    <section className='p-8 mt-10 bg-gray-100 text-center'>
-      <div className='flex justify-between items-center'>
-        <h2 className='text-xl font-bold mb-6'>What Our Users Say</h2>
+    <section className="p-8 mt-10 bg-gray-100 text-center">
+      <div className="flex justify-between items-center">
+        <h2 className="text-xl font-bold mb-6">What Our Users Say</h2>
 
         <button
           onClick={() => setIsModalOpen(true)}
-          className='bg-blue-500 text-black border p-2 rounded mb-6'
+          className="bg-gray-700 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-gray-600 mb-10"
         >
           Share Your Review
         </button>
@@ -44,11 +44,11 @@ const WhatOurUsersSay = () => {
       {loading ? (
         <Loader />
       ) : (
-        <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {testimonials.map((user, index) => (
-            <div key={index} className='bg-white p-6 rounded-lg shadow-md'>
-              <p className='text-lg italic'>{user.quote}</p>
-              <p className='mt-4 font-bold'>{user.name}</p>
+            <div key={index} className="bg-white p-6 rounded-lg shadow-md">
+              <p className="text-lg italic">{user.quote}</p>
+              <p className="mt-4 font-bold">{user.name}</p>
             </div>
           ))}
         </div>

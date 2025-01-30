@@ -33,19 +33,18 @@ const features = [
 
 const Index = () => {
   return (
-    <div className="p-8 bg-gray-100">
-      <nav className="text-lg text-black-800 mb-7 mt-6 text-2">
-        <a href="/" className="hover:text-blue-500">
-          Home
-        </a>{" "}
-        &gt; <span>Features</span>
-      </nav>
-      <h1 className="text-3xl font-bold text-center mb-8">Our Features</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+    <div className="  my-10 px-20">
+      <h1 className="text-dark text-4xl font-extrabold text-center my-1">
+        Features
+      </h1>
+      <p className="text-light text-center font-bold mb-8 text-[#4b5563]">
+        We Know Detroit Like No One Else
+      </p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 cursor-pointer">
         {features.map((feature) => (
           <div
             key={feature.id}
-            className="bg-white shadow-md rounded-lg overflow-hidden transform transition-all duration-300 hover:scale-105"
+            className="bg-white shadow-md rounded-lg overflow-hidden transform transition-all duration-300 hover:scale-105 "
           >
             <img
               src={feature.image}
