@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-  baseURL: "http://localhost:5000", // Replace with your API base URL
+  // baseURL: "http://localhost:5000", // Replace with your API base URL
+  baseURL:"https://detroit-backend-main.vercel.app",
 });
 
 apiClient.interceptors.request.use(

@@ -170,6 +170,16 @@ const Createrstripe = async data => {
     throw error;
   }
 };
+const getEvents = async ()=> {
+  try {
+    const response = await apiClient.get('/viewEvents/events');
+    return response.data;
+  } catch (error) {
+    console.error('Error Getting user suggestions:', error);
+    throw error;
+  }
+}
+
 
 export default {
   LoginApi,
@@ -190,4 +200,5 @@ export default {
   FetchItinerarySuggestions,
   getSuggestions,
   Createrstripe,
+  getEvents
 };

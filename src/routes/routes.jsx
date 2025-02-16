@@ -64,7 +64,7 @@ export const routes = createBrowserRouter([
         element: <Result />,
       },
       {
-        path: '/ai',
+        path: '/ai/:id',
         element: <AiEngine />,
       },
       {

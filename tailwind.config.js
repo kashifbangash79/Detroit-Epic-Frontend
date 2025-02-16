@@ -66,7 +66,9 @@ export default {
   			'sans-sarif': 'DM Sans",sans-serif',
   			montserrat: 'montserrat_regular",sans-serif',
   			'dn-sanas': 'DM Sans',
-  			text: 'Helvetica Neue",Arial,sans-serif'
+  			text: 'Helvetica Neue",Arial,sans-serif',
+			  grotesk: ["Space Grotesk", "sans-serif"],
+			  ubuntu: ["Ubuntu", "sans-serif"],
   		},
   		borderRadius: {
   			lg: 'var(--radius)',

@@ -37,8 +37,8 @@ const Header = () => {
   };
 
   return (
-    <header className="shadow-md relative bg-[#fff] text-gray-800">
-      <div className="absolute inset-0"></div>
+    <header className="shadow-md fixed top-0 left-0 right-0 z-50 bg-[#fff] text-gray-800 ">
+      {/* <div className="absolute inset-0"></div> */}
       <nav className="relative z-10 flex justify-between items-center px-4 py-4">
         <Link to={"/"}>
           <div className="text-2xl font-bold">DEW</div>

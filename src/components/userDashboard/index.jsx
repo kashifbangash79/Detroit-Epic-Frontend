@@ -44,8 +44,6 @@ const notifications = [
 
 export default function UserDashboard() {
   const [itineraryData, setGetitinerary] = useState([]);
-  const [isGeneratingSuggestions, setIsGeneratingSuggestions] = useState(false);
-  const [generatedSuggestions, setGeneratedSuggestions] = useState(false); // Track if suggestions have been generated
   const [itineraryLoadingState, setItineraryLoadingState] = useState({});
 
   const [profileData, setProfileData] = useState(null);
@@ -53,12 +51,14 @@ export default function UserDashboard() {
   const [selectedItinerary, setSelectedItinerary] = useState(null);
   const [showNotifications, setShowNotifications] = useState(false); // State to toggle notifications
   const [isEditModalOpen, setIsEditModalOpen] = useState(false); // State for edit profile modal
-  const [budget, setBudget] = useState(0); // State for edit profile modal
   const [isLoading, setIsLoading] = useState(true);
   const [editData, setEditData] = useState({ fullName: "", email: "" });
   // Form state for inputs
   const [interest, setSelectedInterests] = useState([]);
   const [activityPreferences, setActivityPreferences] = useState([]);
+  const [dietaryPreferences, setDietaryPreferences] = useState([]);
+
+  const [entertainmentPreferences, setEntertainmentPreferences] = useState([]);
   const [diningPreferences, setDiningPreferences] = useState([]);
   const [referalcode, setreferalcode] = useState("");
   const [referalcodestatus, setreferalcodestatus] = useState("");
@@ -66,6 +66,9 @@ export default function UserDashboard() {
   const [successmessage, setsucessmessage] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false); // State to track saving status
+  const [landmarks, setLandmarks] = useState([]);
+  const [cuisinePreferences, setCuisinePreferences] = useState([]);
+
 
   const [formData, setFormData] = useState({
     destination: "Detroit",
@@ -79,6 +82,12 @@ export default function UserDashboard() {
     cuisineType: "",
     transportation: "",
     budget: 0,
+    accessibility: "",
+    specialOccasion: "",
+    additionalActivities: "",
+    exploreNearby: "",
+    accomodation: "",
+    preferredPace: "",
   });
   const navigate = useNavigate(); // Hook to navigate programmatically
   useEffect(() => {
@@ -111,34 +120,97 @@ export default function UserDashboard() {
   };
 
   //Add New Itinerary code with check box logic
+  // const handleCheckboxChange = (category, value) => {
+  //   if (category === "interest") {
+  //     setSelectedInterests((prevState) => {
+  //       if (prevState.includes(value)) {
+  //         return prevState.filter((item) => item !== value);
+  //       } else {
+  //         return [...prevState, value];
+  //       }
+  //     });
+  //   } else if (category === "activityPreferences") {
+  //     setActivityPreferences((prevState) => {
+  //       if (prevState.includes(value)) {
+  //         return prevState.filter((item) => item !== value);
+  //       } else {
+  //         return [...prevState, value];
+  //       }
+  //     });
+  //   } else if (category === "diningPreferences") {
+  //     setDiningPreferences((prevState) => {
+  //       if (prevState.includes(value)) {
+  //         return prevState.filter((item) => item !== value);
+  //       } else {
+  //         return [...prevState, value];
+  //       }
+  //     });
+  //   }
+  // };
+
   const handleCheckboxChange = (category, value) => {
-    if (category === "interest") {
-      setSelectedInterests((prevState) => {
-        if (prevState.includes(value)) {
-          return prevState.filter((item) => item !== value);
-        } else {
-          return [...prevState, value];
-        }
-      });
-    } else if (category === "activityPreferences") {
-      setActivityPreferences((prevState) => {
-        if (prevState.includes(value)) {
-          return prevState.filter((item) => item !== value);
-        } else {
-          return [...prevState, value];
-        }
-      });
-    } else if (category === "diningPreferences") {
-      setDiningPreferences((prevState) => {
-        if (prevState.includes(value)) {
-          return prevState.filter((item) => item !== value);
-        } else {
-          return [...prevState, value];
-        }
-      });
+    switch (category) {
+      case "interest":
+        setSelectedInterests((prevState) =>
+          prevState.includes(value)
+            ? prevState.filter((item) => item !== value)
+            : [...prevState, value]
+        );
+        break;
+  
+      case "activityPreferences":
+        setActivityPreferences((prevState) =>
+          prevState.includes(value)
+            ? prevState.filter((item) => item !== value)
+            : [...prevState, value]
+        );
+        break;
+  
+      case "entertainmentPreferences":
+        setEntertainmentPreferences((prevState) =>
+          prevState.includes(value)
+            ? prevState.filter((item) => item !== value)
+            : [...prevState, value]
+        );
+        break;
+  
+      case "diningPreferences":
+        setDiningPreferences((prevState) =>
+          prevState.includes(value)
+            ? prevState.filter((item) => item !== value)
+            : [...prevState, value]
+        );
+        break;
+  
+      case "dietaryPreferences":
+        setDietaryPreferences((prevState) =>
+          prevState.includes(value)
+            ? prevState.filter((item) => item !== value)
+            : [...prevState, value]
+        );
+        break;
+  
+      case "cuisinePreferences": // New case for cuisinePreferences
+        setCuisinePreferences((prevState) =>
+          prevState.includes(value)
+            ? prevState.filter((item) => item !== value)
+            : [...prevState, value]
+        );
+        break;
+  
+      case "landmarks":
+        setLandmarks((prevState) =>
+          prevState.includes(value)
+            ? prevState.filter((item) => item !== value)
+            : [...prevState, value]
+        );
+        break;
+  
+      default:
+        console.warn(`Unknown category: ${category}`);
+        break;
     }
   };
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => {
@@ -177,6 +249,10 @@ export default function UserDashboard() {
       interest, // Ensure this is an array
       activityPreferences, // Ensure this is an array
       diningPreferences, // Ensure this is an array
+      entertainmentPreferences,
+      dietaryPreferences,
+      cuisinePreferences,
+      landmarks
     };
     setIsSaving(true); // Start loading spinner
 
@@ -210,7 +286,7 @@ export default function UserDashboard() {
     setIsLoading(true);
     try {
       const response = await userApi.Getitineraries();
-      console.log(response);
+      console.log("Fetched itineraries:", response);
 
       // Ensure response is an array before setting the state
       if (Array.isArray(response)) {
@@ -265,7 +341,7 @@ export default function UserDashboard() {
       console.log("Fetched suggestions:", response);
 
       // Navigate to AI page with suggestions
-      navigate("/ai", { state: { suggestions: response } });
+      navigate(`/ai/${itinerary._id}`, { state: { suggestions: response } });
     } catch (error) {
       console.error("Error fetching suggestions:", error);
     }
@@ -435,31 +511,45 @@ export default function UserDashboard() {
               isMenuOpen ? "block" : "hidden"
             } absolute left-0 top-full z-10 w-full bg-white shadow-lg md:static md:z-auto md:block md:shadow-none`}
           >
-            <TabsList className="grid grid-cols-1 bg-white h-full gap-2 md:grid-cols-4 md:gap-4 p-4 md:p-0">
+            <TabsList className="grid grid-cols-2 md:grid-cols-6 bg-white h-full gap-1 p-2 md:p-0">
               <TabsTrigger
                 value="profile"
-                className="px-4 py-2 text-lg font-medium text-gray-600 border-b-2 border-transparent hover:border-blue-500 hover:text-blue-500 transition-colors duration-300"
+                className="px-4 py-2 text-sm font-medium text-gray-600 border-b-2 border-transparent hover:border-blue-500 hover:text-blue-500 transition-colors duration-300"
               >
                 Profile
               </TabsTrigger>
               <TabsTrigger
                 value="itineraries"
-                className="px-4 py-2 text-lg font-medium text-gray-600 border-b-2 border-transparent hover:border-blue-500 hover:text-blue-500 transition-colors duration-300"
+                className="px-4 py-2 text-sm font-medium text-gray-600 border-b-2 border-transparent hover:border-blue-500 hover:text-blue-500 transition-colors duration-300"
               >
                 Itineraries
               </TabsTrigger>
               <TabsTrigger
                 value="referrals"
                 onClick={handleCreatereferralsSubmit}
-                className="px-4 py-2 text-lg font-medium text-gray-600 border-b-2 border-transparent hover:border-blue-500 hover:text-blue-500 transition-colors duration-300"
+                className="px-4 py-2 text-sm font-medium text-gray-600 border-b-2 border-transparent hover:border-blue-500 hover:text-blue-500 transition-colors duration-300"
               >
                 Referrals
               </TabsTrigger>
               <TabsTrigger
                 value="add-itinerary"
-                className="px-4 py-2 text-lg font-medium text-gray-600 border-b-2 border-transparent hover:border-blue-500 hover:text-blue-500 transition-colors duration-300"
+                className="px-4 py-2 text-sm font-medium text-gray-600 border-b-2 border-transparent hover:border-blue-500 hover:text-blue-500 transition-colors duration-300"
               >
                 Add Itinerary
+              </TabsTrigger>
+
+              <TabsTrigger
+                value="manage_experiences"
+                className="px-4 py-2 text-sm font-medium text-gray-600 border-b-2 border-transparent hover:border-blue-500 hover:text-blue-500 transition-colors duration-300"
+              >
+                Manage Experiences
+              </TabsTrigger>
+
+              <TabsTrigger
+                value="manage-blogs"
+                className="px-4 py-2 text-sm font-medium text-gray-600 border-b-2 border-transparent hover:border-blue-500 hover:text-blue-500 transition-colors duration-300"
+              >
+                Manage Blogs
               </TabsTrigger>
             </TabsList>
           </div>
@@ -1003,6 +1093,32 @@ export default function UserDashboard() {
             </CardContent>
           </Card>
         </TabsContent>
+        <TabsContent value="manage_experiences">
+          <Card>
+            <div className="p-4 text-start">
+              <h2 className="text-lg font-semibold text-gray-700">
+                Your Experiences
+              </h2>
+              <p className="text-sm text-gray-500">
+                View and manage your experiences
+              </p>
+              <div className="mt-8 text-gray-400">No experiences found.</div>
+            </div>
+          </Card>
+        </TabsContent>
+        <TabsContent value="manage-blogs">
+          <Card>
+            <div className="p-4 text-start">
+              <h2 className="text-lg font-semibold text-gray-700">
+                Your Blogs
+              </h2>
+              <p className="text-sm text-gray-500">
+                View and manage your blogs
+              </p>
+              <div className="mt-8 text-gray-400">No experiences found.</div>
+            </div>
+          </Card>
+        </TabsContent>
         <TabsContent value="add-itinerary">
           <div className="border rounded-lg p-6">
             <div className="mb-6">
@@ -1143,12 +1259,40 @@ export default function UserDashboard() {
                       <Label>Interests</Label>
                       <div className="grid grid-cols-2 gap-2">
                         {[
-                          { id: "music", label: "Music" },
-                          { id: "sport", label: "Sport" },
-                          { id: "Food", label: "Food" },
-                          { id: "art", label: "Art" },
-                          { id: "nightlife", label: "Nightlife" },
-                          { id: "history", label: "History" },
+                          {
+                            id: "Sightseeing",
+                            label:
+                              "Sightseeing (museums, landmarks, architecture)",
+                          },
+                          { id: "Sporting-events", label: "Sporting events" },
+                          {
+                            id: "Live-music-concerts",
+                            label: "Live music/concerts",
+                          },
+                          {
+                            id: "Nightlife",
+                            label: "Nightlife (bars, clubs, lounges)",
+                          },
+                          {
+                            id: "Outdoor-activities",
+                            label:
+                              "Outdoor activities (parks, trails, waterfronts)",
+                          },
+                          {
+                            id: "Food-and-drink",
+                            label:
+                              "Food and drink (restaurants, breweries, food tours)",
+                          },
+                          {
+                            id: "Shopping",
+                            label: "Shopping (boutiques, markets, malls)",
+                          },
+                          { id: "Art", label: "Art" },
+                          {
+                            id: "Relaxation",
+                            label: "Relaxation (spas, wellness centers)",
+                          },
+                          { id: "Other", label: "Other" },
                         ].map((item) => (
                           <div key={item.id}>
                             <input
@@ -1163,25 +1307,6 @@ export default function UserDashboard() {
                             </label>
                           </div>
                         ))}
-                      </div>
-                    </div>
-                    {/* Budget Slider */}
-                    <div>
-                      <Label>Budget (USD)</Label>
-                      <div className="flex items-center space-x-4">
-                        <input
-                          type="range"
-                          min="0"
-                          max="5000"
-                          step="100"
-                          name="budget"
-                          value={formData.budget}
-                          onChange={handleInputChange}
-                          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
-                        />
-                        <span className="text-sm text-gray-700">
-                          ${formData.budget}
-                        </span>
                       </div>
                     </div>
                     {/* Transportation Preferences */}
@@ -1244,16 +1369,29 @@ export default function UserDashboard() {
                       <Label>Dining Preferences</Label>
                       <div className="grid grid-cols-2 gap-2">
                         {[
-                          { id: "trendy-hotspots", label: "Trendy Hotspots" },
-                          { id: "family-friendly", label: "Family-Friendly" },
-                          { id: "street-food", label: "Street Food" },
-                          { id: "casual-dining", label: "Casual Dining" },
-                          { id: "budget-friendly", label: "Budget-friendly" },
-                          { id: "local-favorites", label: "Local Favorites" },
-                          { id: "fine-dining", label: "Fine Dining" },
-                          { id: "casual", label: "Casual" },
-                          { id: "vegetarian", label: "Vegetarian" },
-                          { id: "local-cuisine", label: "Local Cuisine" },
+                          { id: "Fine-dining", label: "Fine-dining" },
+                          { id: "Casual-dining", label: "Casual dining" },
+                          {
+                            id: "Local-Detroit-classics",
+                            label:
+                              "Local Detroit classics (Coney dogs, Detroit-style pizza)",
+                          },
+                          { id: "Mexican", label: "Mexican" },
+                          {
+                            id: "International-cuisine",
+                            label: "International cuisine",
+                          },
+                          { id: "Vegetarian", label: "Vegetarian" },
+                          { id: "Italian", label: "Italian" },
+                          { id: "Asian", label: "Asian" },
+                          { id: "Fusion", label: "Fusion" },
+                          { id: "Soul-Food", label: "Soul Food" },
+                          { id: "Sea-food", label: "Seafood" },
+                          { id: "Deserts-Cafes", label: "Deserts-Cafes" },
+                          {
+                            id: "open-to-all-types-of-food",
+                            label: "I’m open to all types of food",
+                          },
                         ].map((item) => (
                           <div key={item.id}>
                             <input
@@ -1283,29 +1421,15 @@ export default function UserDashboard() {
                             id: "family-friendly",
                             label: "Family-Friendly Experiences",
                           },
-                          { id: "live-concerts", label: "Live Concerts" },
-                          { id: "relaxation", label: "Relaxation and Spa" },
-                          { id: "food-tours", label: "Food Tours" },
-                          { id: "shopping", label: "Shopping" },
+                          { id: "live-concerts", label: "Concerts" },
+                          { id: "Festivals", label: "Festivals" },
                           {
-                            id: "live-entertainment",
-                            label: "Live Entertainment",
-                          },
-                          { id: "sightseeing", label: "Sightseeing" },
-                          { id: "sporting-events", label: "Sporting Events" },
-                          { id: "concerts", label: "Concerts" },
-                          { id: "museums", label: "Museums" },
-                          {
-                            id: "outdoor-adventures",
-                            label: "Outdoor Adventures",
+                            id: "Food-wine-tastings",
+                            label: "Food/wine tastings",
                           },
                           {
-                            id: "Nightlife",
-                            label: "Nightlife",
-                          },
-                          {
-                            id: "Cultural-Tours",
-                            label: "Cultural Tours",
+                            id: "Theater-performances",
+                            label: "Theater-performances",
                           },
                         ].map((item) => (
                           <div key={item.id}>
@@ -1324,6 +1448,282 @@ export default function UserDashboard() {
                             </label>
                           </div>
                         ))}
+                      </div>
+                    </div>
+                    {/* LandMark */}
+                    <div>
+  <Label>Detroit Landmarks/Attraction</Label>
+  <div className="grid grid-cols-2 gap-2">
+    {[
+      {
+        id: "Detroit-Institute-of-Arts",
+        label: "Detroit-Institute-of-Arts",
+      },
+      {
+        id: "Comerica-Park",
+        label: "Comerica Park (Tigers baseball)",
+      },
+      {
+        id: "Ford-Field",
+        label: "Ford Field (Lions football)",
+      },
+      {
+        id: "Little-Caesars-Arena",
+        label: "Little Caesars Arena (Red Wings hockey, Pistons)",
+      },
+      { id: "Eastern-Market", label: "Eastern Market" },
+      { id: "Belle-Isle-Park", label: "Belle Isle Park" },
+      {
+        id: "Motown-Museum",
+        label: "Motown Museum",
+      },
+      {
+        id: "Detroit-Historical-Museum",
+        label: "Detroit Historical Museum",
+      },
+      {
+        id: "The-Guardian-Building",
+        label: "The Guardian Building",
+      },
+      {
+        id: "open-to-suggestions",
+        label: "I’m open to suggestions",
+      },
+    ].map((item) => (
+      <div key={item.id}>
+        <input
+          type="checkbox"
+          id={item.id}
+          onChange={() =>
+            handleCheckboxChange("landmarks", item.label) // Use "landmarks" as the category
+          }
+        />
+        <label htmlFor={item.id} className="ml-2">
+          {item.label}
+        </label>
+      </div>
+    ))}
+  </div>
+</div>
+                    {/* Entertainment */}
+                    <div>
+                      <Label>Entertainment or Music Preferences</Label>
+                      <div className="grid grid-cols-2 gap-2">
+                        {[
+                          { id: "Live-rock-music", label: "Live rock music" },
+                          {
+                            id: "Jazz-blues",
+                            label: "Jazz/blues",
+                          },
+                          { id: "Classical", label: "Classical" },
+                          { id: "Hip-hop", label: "Hip-hop/R&B" },
+                          { id: "Pop-Top", label: "Pop/Top 40" },
+                          { id: "Electronic-EDM", label: "Electronic/EDM" },
+                          {
+                            id: "Comedy-shows",
+                            label: "Comedy shows",
+                          },
+                          {
+                            id: "Theater-performing-arts",
+                            label: "Theater/performing arts",
+                          },
+                          {
+                            id: "open-to-new-experiences",
+                            label: "I’m open to new experiences",
+                          },
+                        ].map((item) => (
+                          <div key={item.id}>
+                            <input
+                              type="checkbox"
+                              id={item.id}
+                              onChange={() =>
+                                handleCheckboxChange(
+                                  "entertainmentPreferences",item.label)
+                              }
+                            />
+                            <label htmlFor={item.id} className="ml-2">
+                              {item.label}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    {/* Entertainment */}
+                    <div>
+                      <Label>Dietary restrictions or preferences?</Label>
+                      <div className="grid grid-cols-2 gap-2">
+                        {[
+                          { id: "Gluten-free", label: "Gluten-free" },
+                          {
+                            id: "Dairy-free",
+                            label: "Dairy-free",
+                          },
+                          { id: "Vegetarian", label: "Vegetarian" },
+                          { id: "Vegan", label: "Vegan" },
+                          { id: "Kosher", label: "Kosher" },
+                          { id: "Halal", label: "Halal" },
+                        ].map((item) => (
+                          <div key={item.id}>
+                            <input
+                              type="checkbox"
+                              id={item.id}
+                              onChange={() =>
+                                handleCheckboxChange(
+                                  "dietaryPreferences",
+                                  item.label
+                                )
+                              }
+                            />
+                            <label htmlFor={item.id} className="ml-2">
+                              {item.label}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    {/* Accomdation */}
+                    <div>
+                      <Label>Accomodation</Label>
+                      <select
+                        className="block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-indigo-500 focus:border-indigo-500"
+                        value={formData.accomodation}
+                        onChange={handleInputChange}
+                        name="accomodation"
+                      >
+                        <option value="" disabled selected>
+                          Select Accomodation
+                        </option>
+                        <option value="public">Botique Hotel</option>
+                        <option value="ride-sharing">Luxury Hotel</option>
+                        <option value="private">Budget Friendly Hotel</option>
+                        <option value="car-rental">
+                          AirBnB or Vaction rental
+                        </option>
+                        <option value="biking">No accomodation needed</option>
+                      </select>
+                    </div>
+                  {/* Preferred Pace */}
+<div>
+  <Label>Preferred Pace</Label>
+  <select
+    className="block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-indigo-500 focus:border-indigo-500"
+    value={formData.preferredPace}
+    onChange={handleInputChange}
+    name="preferredPace"
+  >
+    <option value="" disabled>
+      Select Preferred Pace
+    </option>
+    <option value="relaxed">Relaxed, with Plenty of Downtime</option>
+    <option value="moderate">Moderate, a good mix of activities and free time</option>
+    <option value="busy">Busy, packed with activities and experiences</option>
+  </select>
+</div>
+
+                    {/* Any special accessibility features */}
+                    <div>
+                      <Label>Any special accessibility features</Label>
+                      <select
+                        className="block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-indigo-500 focus:border-indigo-500"
+                        value={formData.accessibility} // Corrected value binding
+                        onChange={handleInputChange}
+                        name="accessibility" // Correct name for accessibility field
+                      >
+                        <option value="" disabled>
+                          Select Any special accessibility features
+                        </option>
+                        <option value="Yes, Wheelchairs access etc">
+                          Yes, Wheelchairs access etc
+                        </option>
+                        <option value="NO">NO</option>
+                        <option value="Not Sure Yet">Not Sure Yet</option>
+                      </select>
+                    </div>
+                    {/* Celebrating a special occasion? */}
+                    <div>
+                      <Label>Celebrating a special occasion?</Label>
+                      <select
+                        className="block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-indigo-500 focus:border-indigo-500"
+                        value={formData.specialOccasion} // Corrected value binding
+                        onChange={handleInputChange}
+                        name="specialOccasion" // Correct name for specialOccasion field
+                      >
+                        <option value="" disabled>
+                          Select special occasion?
+                        </option>
+                        <option value="Yes, (anniversary, birthday, engagement etc.)">
+                          Yes, (anniversary, birthday, engagement etc.)
+                        </option>
+                        <option value="NO">NO</option>
+                        <option value="Prefer Not to say">
+                          Prefer Not to say
+                        </option>
+                      </select>
+                    </div>
+                    {/* Additional activity suggestions during your trip */}
+                    <div>
+                      <Label>
+                        Additional activity suggestions during your trip
+                      </Label>
+                      <select
+                        className="block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-indigo-500 focus:border-indigo-500"
+                        value={formData.additionalActivities} // Corrected value binding
+                        onChange={handleInputChange}
+                        name="additionalActivities" // Correct name for additionalActivities field
+                      >
+                        <option value="" disabled>
+                          Select Additional activity suggestions
+                        </option>
+                        <option value="Yes, send Real time accommodation">
+                          Yes, send Real time accommodation
+                        </option>
+                        <option value="NO, Stick to original Plan">
+                          NO, Stick to original Plan
+                        </option>
+                        <option value="Not sure yet">Not sure yet</option>
+                      </select>
+                    </div>
+                    {/* Would you like to explore any nearby areas outside of Detroit? */}
+                    <div>
+                      <Label>
+                        Would you like to explore any nearby areas outside of
+                        Detroit?
+                      </Label>
+                      <select
+                        className="block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-indigo-500 focus:border-indigo-500"
+                        value={formData.exploreNearby} // Corrected value binding
+                        onChange={handleInputChange}
+                        name="exploreNearby" // Correct name for exploreNearby field
+                      >
+                        <option value="" disabled>
+                          Select Additional activity suggestions
+                        </option>
+                        <option value="Yes, I'd like to see nearby suburbs or attractions">
+                          Yes, I would like to see nearby suburbs or attractions
+                        </option>
+                        <option value="NO, I will stay in Detroit">
+                          NO, I will stay in Detroit
+                        </option>
+                        <option value="Not sure yet">Not sure yet</option>
+                      </select>
+                    </div>
+                    {/* Budget Slider */}
+                    <div>
+                      <Label>Budget (USD)</Label>
+                      <div className="flex items-center space-x-4">
+                        <input
+                          type="range"
+                          min="0"
+                          max="5000"
+                          step="100"
+                          name="budget"
+                          value={formData.budget}
+                          onChange={handleInputChange}
+                          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+                        />
+                        <span className="text-sm text-gray-700">
+                          ${formData.budget}
+                        </span>
                       </div>
                     </div>
                     {/* Submit Button */}
